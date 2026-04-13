@@ -5,6 +5,8 @@ class typing_overloading
 {
 public:
     typing_overloading();
+
+    void Demo();
 };
 
 #endif // TYPING_OVERLOADING_H

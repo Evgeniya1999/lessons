@@ -15,16 +15,15 @@
 /// @author Учебный код с комментариями Doxygen для Qt Creator
 /// @date 2026
 // =================================================================================================
+#include "init_class.h"
 
 #include <QCoreApplication>
 #include <algorithm>
 #include <bitset>
-#include <charconv>
 #include <cstdlib> // malloc, calloc, realloc, free
 #include <cstring> // memcpy
 #include <iomanip>
 #include <iostream>
-#include <memory> // unique_ptr
 #include <optional>
 #include <vector>
 #include <winsock2.h> // только Windows, для CoCreateGuid
@@ -39,6 +38,7 @@ using std::optional;
 #pragma region Структуры_и_классы
 // =================================================================================================
 
+
 /// @brief Структура задачи (todo-элемент).
 /// @details Содержит идентификатор, название и статус выполнения.
 struct Task
@@ -48,134 +48,6 @@ struct Task
     bool is_done;      ///< true — выполнено, false — ещё нет
 };
 
-/// @brief Класс студента с именем, отчеством, фамилией.
-/// @details Демонстрирует перегрузку операторов `+` (добавление строки к отчеству)
-///          и `==` (сравнение всех полей).
-class Student
-{
-private:
-    string name;       ///< Имя
-    string patronymic; ///< Отчество
-    string last_name;  ///< Фамилия
-public:
-    /// @brief Конструктор, инициализирующий все поля.
-    Student(string n, string p, string l);
-
-    /// @brief Геттер имени.
-    string GetName() const;
-    /// @brief Геттер отчества.
-    string GetPatronymic() const;
-    /// @brief Геттер фамилии.
-    string GetLastName() const;
-
-    /// @brief Оператор +: возвращает нового студента, дописывая строку к отчеству.
-    /// @param n Строка, добавляемая в конец отчества.
-    /// @return Новый объект Student с изменённым отчеством.
-    Student operator+(string n) const { return Student(name, patronymic + n, last_name); }
-
-    /// @brief Оператор равенства: сравнивает все три поля.
-    /// @return true, если все поля совпадают.
-    bool operator==(const Student &other) const
-    {
-        return (name == other.name && patronymic == other.patronymic
-                && last_name == other.last_name);
-    }
-};
-
-// Реализация методов Student
-Student::Student(string n, string p, string l)
-    : name(n)
-    , patronymic(p)
-    , last_name(l)
-{}
-string Student::GetName() const
-{
-    return name;
-}
-string Student::GetPatronymic() const
-{
-    return patronymic;
-}
-string Student::GetLastName() const
-{
-    return last_name;
-}
-
-#pragma endregion
-
-// =================================================================================================
-#pragma region Ручное_управление_памятью_структура_Vector
-// =================================================================================================
-
-/// @brief Самодельный вектор чисел double (учебный пример).
-/// @details Хранит указатель на массив в куче и размер.
-///          Показывает необходимость ручного освобождения памяти.
-struct Vector
-{
-    double *elem = nullptr; ///< Указатель на динамический массив
-    int sz = 0;             ///< Количество элементов
-};
-
-/// @brief Инициализирует вектор заданным размером, выделяя память в куче.
-/// @param v  Ссылка на структуру Vector
-/// @param s  Требуемый размер
-void vector_init(Vector &v, int s)
-{
-    if (v.elem)
-        delete[] v.elem;    // очистка предыдущего (безопасно)
-    v.elem = new double[s]; // выделение
-    v.sz = s;
-}
-
-/// @brief Освобождает память вектора и обнуляет указатель с размером.
-/// @param v Ссылка на структуру Vector
-void vector_destroy(Vector &v)
-{
-    if (v.elem)
-        delete[] v.elem;
-    v.elem = nullptr;
-    v.sz = 0;
-}
-
-#pragma endregion
-
-// =================================================================================================
-#pragma region Передача_параметров_копия_ссылка_указатель
-// =================================================================================================
-
-/// @brief Демонстрация различий передачи параметров.
-/// @param v   Копия структуры (изменения не видны снаружи)
-/// @param rv  Ссылка на оригинал (изменяет внешний объект)
-/// @param pv  Указатель на оригинал (требует разыменования, может быть nullptr)
-void access_to_structure(Vector v, Vector &rv, Vector *pv)
-{
-    cout << "\n--- [ ВХОД В ФУНКЦИЮ ] ---" << endl;
-    cout << "Адрес v (копия):    " << &v << " | sz: " << v.sz << endl;
-    cout << "Адрес rv (ссылка): " << &rv << " | sz: " << rv.sz << endl;
-    cout << "Адрес *pv (указатель): " << pv << " | sz: " << (pv ? pv->sz : -1) << endl;
-    cout << "---------------------------" << endl;
-    cout << "Выполняем изменения..." << endl;
-    v.sz = 1;
-    cout << "  -> v.sz (копия) теперь 1" << endl;
-    rv.sz = 2;
-    cout << "  -> rv.sz (ссылка) теперь 2" << endl;
-    if (pv) {
-        pv->sz = 3;
-        cout << "  -> pv->sz (указатель) теперь 3" << endl;
-    }
-    cout << "---------------------------" << endl;
-    cout << "ИТОГ ВНУТРИ: v=" << v.sz << ", rv=" << rv.sz << ", pv=" << (pv ? pv->sz : -1) << endl;
-    cout << "--- [ ВЫХОД ИЗ ФУНКЦИИ ] ---\n" << endl;
-}
-
-/// @brief Функция, увеличивающая переданный int на 1 и возвращающая указатель на него.
-/// @param x Ссылка на целое число
-/// @return Указатель на это же число
-int *link_func(int &x)
-{
-    x++;
-    return &x;
-}
 
 #pragma endregion
 
@@ -209,135 +81,16 @@ string bool_to_string(bool b)
 
 const int x_v = 5; ///< Глобальная константа для демонстрации размера массива
 
+
 int main()
 {
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 1. Типизация и перегрузки
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    cout << "       ---------------------------------- " << endl << "       | *** Типизация и перегрузки *** | " << endl << "       ----------------------------------" << endl;
+    init_class init;
+    init.demoTypingOverloading();
+    init.demoCopyReferensePointer();
+    init.demoClassOperators();
+    init.demoStructures();
 
-    double da = 9.0;
-    float fla = 9.0f;
-    int i = 42;
-    short s_val = 10;
-
-    cout << left << setw(25) << " Вход (Аргумент) " << setw(20) << " Тип (typeid) "
-         << " Результат / Статус компиляции " << endl;
-    cout << string(85, '-') << endl;
-
-    cout << setw(25) << "da (variable)" << setw(20) << typeid(da).name() << "Вызов: my_sqrt(double)"
-         << endl;
-    cout << setw(25) << "fla (variable)" << setw(20) << typeid(fla).name()
-         << "Вызов: my_sqrt(float)" << endl;
-    cout << setw(25) << "9.0 (literal)" << setw(20) << typeid(9.0).name()
-         << "Вызов: my_sqrt(double) [Default]" << endl;
-    cout << setw(25) << "9.0f (literal)" << setw(20) << typeid(9.0f).name()
-         << "Вызов: my_sqrt(float) [Suffix]" << endl;
-    cout << string(85, '-') << endl;
-
-    cout << setw(25) << "i (int variable)" << setw(20) << typeid(i).name()
-         << "ОШИБКА: Ambiguous (float? double?)" << endl;
-    cout << setw(25) << "s_val (short variable)" << setw(20) << typeid(s_val).name()
-         << "ОШИБКА: Ambiguous (float? double?)" << endl;
-    cout << setw(25) << "100 (int literal)" << setw(20) << typeid(100).name()
-         << "ОШИБКА: Ambiguous (float? double?)" << endl;
-    cout << string(85, '-') << endl;
-
-    cout << setw(25) << "static_cast<float>(i)" << setw(20) << "float (forced)"
-         << "Вызов: my_sqrt(float) [Manual]" << endl;
-    cout << setw(25) << "static_cast<double>(s_val)" << setw(20) << "double (forced)"
-         << "Вызов: my_sqrt(double) [Manual]" << endl;
-    cout << string(85, '-') << endl;
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 2. Копия, ссылка, указатель (демонстрация)
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    cout << "       ------------------------------------ " << endl << "       | *** Копия, ссылка, указатель *** | " << endl << "       ------------------------------------" << endl;
-
-
-    Vector val_v;
-    Vector link_v;
-    Vector pointer_v;
-
-    vector_init(val_v, 10);
-    vector_init(link_v, 20);
-    vector_init(pointer_v, 30);
-
-    cout << left << setw(15) << " Состояние "
-         << "| " << setw(15) << "val_v (Value)"
-         << "| " << setw(15) << "link_v (Ref&)"
-         << "| " << setw(15) << "ptr_v (Ptr*)" << endl;
-    cout << string(65, '-') << endl;
-
-    cout << setw(15) << " ДО вызова "
-         << "| " << setw(15) << val_v.sz << "| " << setw(15) << link_v.sz << "| " << setw(15)
-         << pointer_v.sz << endl;
-
-    // Ключевой вызов
-    access_to_structure(val_v, link_v, &pointer_v);
-
-    cout << setw(15) << " ПОСЛЕ вызова "
-         << "| " << setw(15) << val_v.sz << "| " << setw(15) << link_v.sz << "| " << setw(15)
-         << pointer_v.sz << endl;
-    cout << string(65, '-') << endl;
-
-    cout << " ИНСАЙТЫ ДЛЯ ПАМЯТИ: " << endl;
-    cout << " 1. Value:  Создан новый объект в стеке. Оригинал в безопасности. (Дорого по памяти)"
-         << endl;
-    cout << " 2. Ref&:   Функция работает с оригиналом напрямую под другим именем. (Быстро)"
-         << endl;
-    cout << " 3. Ptr*:   Передали адрес. Нужно разыменование (->). Можно передать nullptr. (Гибко)"
-         << endl;
-
-    vector_destroy(val_v);
-    vector_destroy(link_v);
-    vector_destroy(pointer_v);
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 3. Операторы классов (Student)
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    cout << "       ---------------------------------" << endl << "       | *** Применение операторов *** |" << endl <<"       ---------------------------------" << endl;
-
-
-    Student s1("Иван", "Иванович", "Иванов");
-    Student s2 = s1 + " (монтажник)";
-
-    cout << left << setw(20) << " Действие " << "| " << "Результат" << endl;
-    cout << string(60, '-') << endl;
-    cout << setw(20) << "s1 (Оригинал):" << "| " << s1.GetPatronymic() << endl;
-    cout << setw(20) << "s2 (Результат +):" << "| " << s2.GetPatronymic() << endl;
-    cout << string(60, '-') << endl;
-
-    cout << setw(20) << "Сравнение (s1 == s2):";
-    if (s1 == s2)
-        cout << "| ОДИНАКОВЫ (ошибка логики?)" << endl;
-    else
-        cout << "| РАЗНЫЕ (оператор работает верно)" << endl;
-
-    cout << setw(20) << "Сравнение (s1 == s1):";
-    if (s1 == s1)
-        cout << "| ОДИНАКОВЫ" << endl;
-    cout << string(60, '-') << endl;
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 4. Структуры (метафора рюкзака)
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    cout << "       ---------------------" << endl << "       | *** Структуры *** |" << endl <<"       ---------------------" << endl;
-
-    Vector v;
-    cout << left << setw(25) << " Этап " << "| " << "Состояние памяти" << endl;
-    cout << string(65, '-') << endl;
-    cout << setw(25) << "После создания:" << "| " << (v.elem == nullptr ? "nullptr" : "есть мусор")
-         << ", sz: " << v.sz << endl;
-    vector_init(v, 5);
-    cout << setw(25) << "После vector_init(5):" << "| " << "Адрес в heap: " << v.elem
-         << ", sz: " << v.sz << endl;
-    delete[] v.elem;
-    v.elem = nullptr;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // 5. Указатели: обход строки
@@ -381,7 +134,7 @@ int main()
     std::cout << sizeof(arr[0]) << std::endl;
 
     int value = 1;
-    int *val = link_func(value);
+    int *val = init.link_func(value);
     cout << *val << " " << value << endl;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

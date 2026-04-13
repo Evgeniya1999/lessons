@@ -9,6 +9,15 @@
 
 typing_overloading::typing_overloading() {}
 
+/// @overload void my_sqrt(float x)
+void typing_overloading::my_sqrt(float x)
+{ /* заглушка */
+}
+
+/// @overload void my_sqrt(double x)
+void typing_overloading::my_sqrt(double x)
+{ /* заглушка */
+}
 void typing_overloading::Demo(){    
 
     std::cout << "       ---------------------------------- " << std::endl << "       | *** Типизация и перегрузки *** | " << std::endl << "       ----------------------------------" << std::endl;

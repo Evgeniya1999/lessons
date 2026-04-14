@@ -1,6 +1,5 @@
 #include "copy_referense_pointer.h"
 
-#include <vector>
 #include <iostream>
 #include <string>
 #include <iomanip>

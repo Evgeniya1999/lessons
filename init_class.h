@@ -5,6 +5,8 @@
 #include "copy_referense_pointer.h"
 #include "class_operators.h"
 #include "structures.h"
+#include "pointer.h"
+
 #include <QObject>
 
 class init_class : public QObject
@@ -26,6 +28,9 @@ public:
     void demoStructures(){
         m_structures->Demo();
     }
+    void demoPointer(){
+        m_pointer->Demo();
+    }
     int* link_func(int &x);
     void vector_init(copy_referense_pointer::Vector &v, int s);
 
@@ -34,6 +39,7 @@ private:
     copy_referense_pointer *m_ref_point;
     class_operators *m_operator;
     structures *m_structures;
+    pointer *m_pointer;
 };
 
 #endif // INIT_CLASS_H

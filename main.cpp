@@ -71,175 +71,177 @@ string bool_to_string(bool b)
 
 const int x_v = 5; ///< Глобальная константа для демонстрации размера массива
 
+void print_menu(){
+    cout << "\nВыберите тему: \n";
+    cout << "1. Типизация и перегрузки\n";
+    cout << "2. Копия, ссылка, указатель\n";
+    cout << "3. Операторы классов\n";
+    cout << "4. Структуры (метафора рюкзака)\n";
+    cout << "5. Указатели: обход строки\n\n";
+}
 
 int main()
 {
 
+
     init_class init;
-    init.demoTypingOverloading();
-    init.demoCopyReferensePointer();
-    init.demoClassOperators();
-    init.demoStructures();
+    print_menu();
+    int block;
+    cin >> block;
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 5. Указатели: обход строки
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    cout << "        ---------------------" << endl << "        | *** Указатели *** |" << endl <<"        ---------------------" << endl;
-
-    char str[] = "12345";
-    char *p = str;
-    char target = '3';
-    int matches = 0;
-
-    cout << left << setw(20) << "Адрес p"
-         << "| " << setw(10) << "*p"
-         << "| " << "Состояние matches" << endl;
-    cout << string(60, '-') << endl;
-    if (p != nullptr) {
-        for (; *p != '\0'; ++p) {
-            bool found = (*p == target);
-            if (found)
-                ++matches;
-            cout << setw(20) << (void *) p << "| " << setw(10) << *p << "| "
-                 << (found ? " НАЙДЕНО! -> " : " ") << matches << endl;
+    while (block > -1) {
+        switch (block) {
+        case 0:
+            print_menu();
+            cin >> block;
+            break;
+        case 1:
+            init.demoTypingOverloading();
+            block = 0;
+            break;
+        case 2:
+            init.demoCopyReferensePointer();
+            block = 0;
+            break;
+        case 3:
+            init.demoClassOperators();
+            block = 0;
+            break;
+        case 4:
+            init.demoStructures();
+            block = 0;
+            break;
+        case 5:
+            init.demoPointer();
+            block = 0;
+            break;
+        default:
+            break;
         }
-    }
-    cout << string(60, '-') << endl;
-    cout << "Итого совпадений для '" << target << "': " << matches << endl;
 
-    // Дополнительные иллюстрации ссылок и указателей
-    int y = 5;
-    int &t = y;
-    t = 7;
-    int *a = &y;
-    *a = 3;
-    y = 1;
-    cout << y << " " << &y << " " << t << " " << *a << endl;
-
-    int arr[10];
-    std::cout << sizeof(int) << std::endl;
-    std::cout << sizeof(arr) << std::endl;
-    std::cout << sizeof(arr[0]) << std::endl;
-
-    int value = 1;
-    int *val = init.link_func(value);
-    cout << *val << " " << value << endl;
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 6. Алгоритмы equal, GUID
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    vector<int> array1 = {1, 2, 3, 5, 4};
-    vector<int> array2 = {1, 2, 3, 4, 5};
-    bool isEqual = equal(array1.begin(), array1.end(), array2.begin());
-    cout << bool_to_string(isEqual) << endl;
-
-    uint8_t guid1[16];
-    HRESULT hr1 = CoCreateGuid(reinterpret_cast<GUID *>(guid1));
-    if (FAILED(hr1)) {
-        cerr << "CoCreateGuid failed" << endl;
-        return {};
-    }
-    uint8_t guid2[16];
-    HRESULT hr2 = CoCreateGuid(reinterpret_cast<GUID *>(guid2));
-    if (FAILED(hr2)) {
-        cerr << "CoCreateGuid failed" << endl;
-        return {};
-    }
-    bool isEqualGuid = equal(begin(guid1), end(guid1), begin(guid2));
-    cout << bool_to_string(isEqualGuid) << endl;
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 7. Битовые операции и IP-заголовок
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    uint8_t first_byte = 0x45;
-    uint8_t ihl = first_byte & 0x0F;
-    size_t ip_header_len = ihl * 4;
-    std::cout << "First byte: 0x" << std::hex << (int) first_byte << std::dec << std::endl;
-    std::cout << "IHL (raw value): " << (int) ihl << std::endl;
-    std::cout << "IP Header Length in bytes: " << ip_header_len << std::endl;
-
-    int v4 = 4, v8 = 8, v16 = 16;
-    cout << "4  | bit: " << bitset<8>(v4) << " | & 0x0F: " << bitset<8>(v4 & 0x0F) << endl;
-    cout << "8  | bit: " << bitset<8>(v8) << " | & 0x0F: " << bitset<8>(v8 & 0x0F) << endl;
-    cout << "16 | bit: " << bitset<8>(v16) << " | & 0x0F: " << bitset<8>(v16 & 0x0F)
-         << " (обнулился!)" << endl;
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 8. Обход строки через указатель (альтернативный)
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    auto s = "Hello";
-    while (*s != '\0') {
-        std::cout << *s << " ";
-        s++;
-    }
-    cout << endl;
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 9. Двумерный массив (матрица)
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    int matrix[5][10];
-    int count = 1;
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 10; j++) {
-            matrix[i][j] = 10 + count++;
-        }
-    }
-    // Диапазонные for (демонстрация)
-    for (int (&row)[10] : matrix) {
-        for (int(&el) : row) {
-            el = 1;
-        }
-        for (int(el) : row) {
-            el = 2;
-        } // Обратите внимание: это не меняет оригинал, т.к. el – копия
-    }
-    for (int (&row)[10] : matrix) {
-        for (int(el) : row) {
-            cout << el << " ";
-        }
-        cout << endl;
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 10. Switch без break (fall-through)
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    int x_null_one_helloword = 0;
-    switch (x_null_one_helloword) {
-    case 1:
-        cout << "Один" << endl;
-    case 0:
-        cout << "Нуль" << endl;
-    case 2:
-        cout << "Привет мир" << endl;
-    }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 11. Массив переменного размера (VLA) — расширение GCC, осторожно
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    int x_v_arr[x_v]; // использует константу x_v = 5
-    // int fun(int x_v);  // объявление функции — закомментировано, чтобы избежать конфликта
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 12. Пример с emplace_back и ссылкой на элемент вектора
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    std::vector<Task> todo_list;
-    todo_list.emplace_back();      // создаёт объект Task прямо внутри вектора
-    Task &task = todo_list.back(); // ссылка на последний элемент (без копирования)
-    task.id = 1;
-    task.title = "Дописать пинг на С++";
-    task.is_done = false;
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 13. Получение цифр числа
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    int x_num = 4569;
-    int d1 = x_num % 10;
-    int d2 = (x_num / 10) % 10;
-    int d3 = (x_num / 100) % 10;
-    int d4 = (x_num / 1000) % 10;
-    cout << d1 << d2 << d3 << d4 << endl;
+
+
+
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //// 6. Алгоритмы equal, GUID
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //vector<int> array1 = {1, 2, 3, 5, 4};
+    //vector<int> array2 = {1, 2, 3, 4, 5};
+    //bool isEqual = equal(array1.begin(), array1.end(), array2.begin());
+    //cout << bool_to_string(isEqual) << endl;
+
+    //uint8_t guid1[16];
+    //HRESULT hr1 = CoCreateGuid(reinterpret_cast<GUID *>(guid1));
+    //if (FAILED(hr1)) {
+    //    cerr << "CoCreateGuid failed" << endl;
+    //    return {};
+    //}
+    //uint8_t guid2[16];
+    //HRESULT hr2 = CoCreateGuid(reinterpret_cast<GUID *>(guid2));
+    //if (FAILED(hr2)) {
+    //    cerr << "CoCreateGuid failed" << endl;
+    //    return {};
+    //}
+    //bool isEqualGuid = equal(begin(guid1), end(guid1), begin(guid2));
+    //cout << bool_to_string(isEqualGuid) << endl;
+
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //// 7. Битовые операции и IP-заголовок
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //uint8_t first_byte = 0x45;
+    //uint8_t ihl = first_byte & 0x0F;
+    //size_t ip_header_len = ihl * 4;
+    //std::cout << "First byte: 0x" << std::hex << (int) first_byte << std::dec << std::endl;
+    //std::cout << "IHL (raw value): " << (int) ihl << std::endl;
+    //std::cout << "IP Header Length in bytes: " << ip_header_len << std::endl;
+
+    //int v4 = 4, v8 = 8, v16 = 16;
+    //cout << "4  | bit: " << bitset<8>(v4) << " | & 0x0F: " << bitset<8>(v4 & 0x0F) << endl;
+    //cout << "8  | bit: " << bitset<8>(v8) << " | & 0x0F: " << bitset<8>(v8 & 0x0F) << endl;
+    //cout << "16 | bit: " << bitset<8>(v16) << " | & 0x0F: " << bitset<8>(v16 & 0x0F)
+    //     << " (обнулился!)" << endl;
+
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //// 8. Обход строки через указатель (альтернативный)
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //auto s = "Hello";
+    //while (*s != '\0') {
+    //    std::cout << *s << " ";
+    //    s++;
+    //}
+    //cout << endl;
+
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //// 9. Двумерный массив (матрица)
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //int matrix[5][10];
+    //int count = 1;
+    //for (int i = 0; i < 5; i++) {
+    //    for (int j = 0; j < 10; j++) {
+    //        matrix[i][j] = 10 + count++;
+    //    }
+    //}
+    //// Диапазонные for (демонстрация)
+    //for (int (&row)[10] : matrix) {
+    //    for (int(&el) : row) {
+    //        el = 1;
+    //    }
+    //    for (int(el) : row) {
+    //        el = 2;
+    //    } // Обратите внимание: это не меняет оригинал, т.к. el – копия
+    //}
+    //for (int (&row)[10] : matrix) {
+    //    for (int(el) : row) {
+    //        cout << el << " ";
+    //    }
+    //    cout << endl;
+    //}
+
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //// 10. Switch без break (fall-through)
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //int x_null_one_helloword = 0;
+    //switch (x_null_one_helloword) {
+    //case 1:
+    //    cout << "Один" << endl;
+    //case 0:
+    //    cout << "Нуль" << endl;
+    //case 2:
+    //    cout << "Привет мир" << endl;
+    //}
+
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //// 11. Массив переменного размера (VLA) — расширение GCC, осторожно
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //int x_v_arr[x_v]; // использует константу x_v = 5
+    //// int fun(int x_v);  // объявление функции — закомментировано, чтобы избежать конфликта
+
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //// 12. Пример с emplace_back и ссылкой на элемент вектора
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //std::vector<Task> todo_list;
+    //todo_list.emplace_back();      // создаёт объект Task прямо внутри вектора
+    //Task &task = todo_list.back(); // ссылка на последний элемент (без копирования)
+    //task.id = 1;
+    //task.title = "Дописать пинг на С++";
+    //task.is_done = false;
+
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //// 13. Получение цифр числа
+    //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //int x_num = 4569;
+    //int d1 = x_num % 10;
+    //int d2 = (x_num / 10) % 10;
+    //int d3 = (x_num / 100) % 10;
+    //int d4 = (x_num / 1000) % 10;
+    //cout << d1 << d2 << d3 << d4 << endl;
 
     return 0;
 }

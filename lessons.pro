@@ -11,6 +11,7 @@ SOURCES += \
         copy_referense_pointer.cpp \
         init_class.cpp \
         main.cpp \
+        pointer.cpp \
         quicksort.cpp \
         structures.cpp \
         typing_overloading.cpp
@@ -26,6 +27,7 @@ HEADERS += \
     class_operators.h \
     copy_referense_pointer.h \
     init_class.h \
+    pointer.h \
     quicksort.h \
     structures.h \
     typing_overloading.h

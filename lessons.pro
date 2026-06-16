@@ -7,6 +7,9 @@ CONFIG += c++17 cmdline
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        MultifilesProject/mp_bar.cpp \
+        MultifilesProject/mp_foo.cpp \
+        MultifilesProject/multifile_project.cpp \
         class_operators.cpp \
         copy_referense_pointer.cpp \
         init_class.cpp \
@@ -24,6 +27,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    MultifilesProject/MP_Bar.h \
+    MultifilesProject/MP_Foo.h \
+    MultifilesProject/multifile_project.h \
     class_operators.h \
     copy_referense_pointer.h \
     init_class.h \
@@ -31,3 +37,4 @@ HEADERS += \
     quicksort.h \
     structures.h \
     typing_overloading.h
+

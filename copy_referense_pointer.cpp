@@ -67,6 +67,7 @@ int* copy_referense_pointer::link_func(int &x)
     return &x;
 }
 
+
 void copy_referense_pointer::Demo(){
 
     std::cout << "       ------------------------------------ " << std::endl << "       | *** Копия, ссылка, указатель *** | " << std::endl << "       ------------------------------------" << std::endl;

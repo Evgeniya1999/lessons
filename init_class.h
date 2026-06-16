@@ -6,6 +6,7 @@
 #include "class_operators.h"
 #include "structures.h"
 #include "pointer.h"
+#include "MultifilesProject/multifile_project.h"
 
 #include <QObject>
 
@@ -31,6 +32,9 @@ public:
     void demoPointer(){
         m_pointer->Demo();
     }
+    void demoMultifileProj(){
+        multifile_proj->Demo();
+    }
     int* link_func(int &x);
     void vector_init(copy_referense_pointer::Vector &v, int s);
 
@@ -40,6 +44,7 @@ private:
     class_operators *m_operator;
     structures *m_structures;
     pointer *m_pointer;
+    Multifile_Project *multifile_proj;
 };
 
 #endif // INIT_CLASS_H

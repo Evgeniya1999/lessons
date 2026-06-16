@@ -78,6 +78,7 @@ void print_menu(){
     cout << "3. Операторы классов\n";
     cout << "4. Структуры (метафора рюкзака)\n";
     cout << "5. Указатели: обход строки\n\n";
+    cout << "6. Многофайловый проект. Защита от повторных включений\n\n";
     cout << "Для завершения работы введите -1\n\n";
 }
 
@@ -115,6 +116,10 @@ int main()
             break;
         case 5:
             init.demoPointer();
+            block = 0;
+            break;
+        case 6:
+            init.demoMultifileProj();
             block = 0;
             break;
         default:
